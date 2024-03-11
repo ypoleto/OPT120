@@ -1,0 +1,35 @@
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8;
+USE `mydb`;
+
+CREATE TABLE IF NOT EXISTS `Usuario` (
+  `id` INT NOT NULL,
+  `nome` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `senha` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email`)
+);
+
+CREATE TABLE IF NOT EXISTS `Atividade` (
+  `id` INT NOT NULL,
+  `titulo` VARCHAR(255) NOT NULL,
+  `desc` VARCHAR(255) NULL,
+  `data` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `usuario_atividades` (
+  `usuario_id` INT NOT NULL,
+  `atividade_id` INT NOT NULL,
+  `entrega` DATETIME NOT NULL,
+  `nota` FLOAT NOT NULL,
+  PRIMARY KEY (`usuario_id`, `atividade_id`),
+  INDEX `idx_usuario_atividade_atividade_id` (`atividade_id`),
+  INDEX `idx_usuario_atividade_usuario_id` (`usuario_id`),
+  CONSTRAINT `fk_usuario_atividade_usuario_id`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `Usuario` (`id`),
+  CONSTRAINT `fk_usuario_atividade_atividade_id`
+    FOREIGN KEY (`atividade_id`)
+    REFERENCES `Atividade` (`id`)
+);
