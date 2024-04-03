@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields, use_key_in_widget_constructors, library_private_types_in_public_api, avoid_print
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -60,15 +58,15 @@ class _FormUsuarioState extends State<FormUsuario> {
         }),
       );
       print('Dados enviados com sucesso');
+
+      // Após o envio bem-sucedido, navegue para a página de início
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Inicio()),
+      );
     } catch (error) {
       print('Erro ao enviar os dados: $error');
     }
-
-    print('nome: $nome (${nome.runtimeType})');
-    print('email: $email (${email.runtimeType})');
-    print('senha: $senha (${senha.runtimeType})');
-
-    // Aqui você pode realizar a lógica para enviar os dados para algum lugar, como um servidor.
   }
 
   @override
@@ -147,5 +145,20 @@ class _FormUsuarioState extends State<FormUsuario> {
     _emailController.dispose();
     _senhaController.dispose();
     super.dispose();
+  }
+}
+
+class ListaUsuarios extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Aqui você pode implementar a lista de usuários
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lista de Usuários'),
+      ),
+      body: Center(
+        child: Text('Lista de Usuários'),
+      ),
+    );
   }
 }

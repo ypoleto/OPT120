@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:front/pages/form-usuario.dart';
-import 'package:front/pages/form-atividade.dart';
-import 'package:front/pages/form-usuario-atividade.dart';
 import 'package:front/pages/inicio.dart';
 
 void main() {
@@ -20,9 +17,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Inicio(),
-        '/usuario': (context) => FormUsuario(),
-        '/atividade': (context) => FormAtividade(),
-        '/usuario-atividade': (context) => FormUsuarioAtividade(),
       },
     );
   }

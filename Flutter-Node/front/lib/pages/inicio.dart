@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
-import 'package:front/pages/form-usuario-atividade.dart';
-import 'package:front/pages/form-usuario.dart';
-import 'package:front/pages/form-atividade.dart';
+import 'package:front/pages/lista-usuario-atividades.dart';
+import 'package:front/pages/lista-usuarios.dart';
+import 'package:front/pages/lista-atividades.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,7 +34,7 @@ class Inicio extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FormUsuario()),
+                  MaterialPageRoute(builder: (context) => ListaUsuarios()),
                 );
               },
               child: Text('Usuários'),
@@ -44,7 +44,7 @@ class Inicio extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FormAtividade()),
+                  MaterialPageRoute(builder: (context) => ListaAtividades()),
                 );
               },
               child: Text('Atividades'),
@@ -54,7 +54,7 @@ class Inicio extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FormUsuarioAtividade()),
+                  MaterialPageRoute(builder: (context) => ListaUsuarioAtividades()),
                 );
               },
               child: Text('Atividades de usuário'),
