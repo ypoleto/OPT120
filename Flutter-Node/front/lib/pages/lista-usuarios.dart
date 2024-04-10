@@ -34,68 +34,86 @@ class _ListaUsuariosState extends State<ListaUsuarios> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Lista de Usuários'),
-         actions: [
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Lista de Usuários'),
+      actions: [
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FormUsuario()),
+              context,
+              MaterialPageRoute(builder: (context) => FormUsuario()),
             );
           },
         ),
       ],
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height * 0.8, // 80% da altura da tela
-        child: FutureBuilder<List<User>>(
-          future: _futureUsers,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-              return Center(child: Text('Nenhum usuário encontrado'));
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  User user = snapshot.data![index];
-                  return ListTile(
-                    title: Text(user.nome),
-                    subtitle: Text(user.email),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            _showEditUserDialog(user);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            _deleteUser(user);
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }
-          },
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 50.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: FutureBuilder<List<User>>(
+            future: _futureUsers,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                return Center(child: Text('Nenhum usuário encontrado'));
+              } else {
+                return DataTable(
+                  columns: [
+                    DataColumn(label: Text('ID')),
+                    DataColumn(label: Text('Nome')),
+                    DataColumn(label: Text('Email')),
+                    DataColumn(label: Text('Operações')),
+                  ],
+                  rows: snapshot.data!.map((user) {
+                    return DataRow(cells: [
+                      DataCell(Text(user.id.toString())),
+                      DataCell(SizedBox(
+                        width: 200,
+                        child: Text(user.nome),
+                      )),
+                      DataCell(SizedBox(
+                        width: 200,
+                        child: Text(user.email),
+                      )),
+                      DataCell(Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              _showEditUserDialog(user);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _deleteUser(user);
+                            },
+                          ),
+                        ],
+                      )),
+                    ]);
+                  }).toList(),
+                );
+              }
+            },
+          ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   void _deleteUser(User user) async {
   // Mostrar um diálogo de confirmação

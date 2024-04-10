@@ -6,6 +6,8 @@ const router = Router();
 router.get('/', async (req, res) => {
     const query = await querys.getAllUsuarioAtividades();
     return res.status(200).json(query);
+
+    
 })
 
 router.post('/', async (req, res) => {

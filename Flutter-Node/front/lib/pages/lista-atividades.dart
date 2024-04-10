@@ -35,68 +35,82 @@ class _ListaAtividadesState extends State<ListaAtividades> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Lista de Atividades'),
-         actions: [
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Lista de Atividades'),
+      actions: [
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FormAtividade()),
+              context,
+              MaterialPageRoute(builder: (context) => FormAtividade()),
             );
           },
         ),
       ],
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height * 0.8, // 80% da altura da tela
-        child: FutureBuilder<List<Atividade>>(
-          future: _futureAtividades,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-              return Center(child: Text('Nenhuma atividade encontrado'));
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  Atividade atividade = snapshot.data![index];
-                  return ListTile(
-                    title: Text(atividade.titulo),
-                    subtitle: Text(atividade.desc),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            _showEditAtividadeDialog(atividade);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            _deleteAtividade(atividade);
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }
-          },
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 50.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: FutureBuilder<List<Atividade>>(
+            future: _futureAtividades,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                return Center(child: Text('Nenhuma atividade encontrada'));
+              } else {
+                return DataTable(
+                  columns: [
+                    DataColumn(label: Text('ID')),
+                    DataColumn(label: Text('Título')),
+                    DataColumn(label: Text('Data')),
+                    DataColumn(label: Text('Operações')),
+                  ],
+                  rows: snapshot.data!.map((atividade) {
+                    return DataRow(cells: [
+                      DataCell(Text(atividade.id.toString())),
+                      DataCell(Container(
+                        width: 200, // ajuste a largura conforme necessário
+                        child: Text(atividade.titulo),
+                      )),
+                      DataCell(Text(atividade.data)),
+                      DataCell(Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              _showEditAtividadeDialog(atividade);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _deleteAtividade(atividade);
+                            },
+                          ),
+                        ],
+                      )),
+                    ]);
+                  }).toList(),
+                );
+              }
+            },
+          ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   void _deleteAtividade(Atividade atividade) async {
   // Mostrar um diálogo de confirmação
